@@ -1,5 +1,4 @@
-from Ralvinn import *
+from RoverVideo import *
 
 if __name__ == '__main__':
-
-    rover = Ralvinn()
+    rover = Rover()
