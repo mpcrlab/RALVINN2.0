@@ -42,7 +42,6 @@ Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVE
 
 
 ##To Do List
-*Give the BrookStone Rover 2.0 the ability to read QR codes.
-*Add more helper functions.
-*Fix Bugs!
-
+      1)Give the BrookStone Rover 2.0 the ability to read QR codes.
+      2)Add more helper functions.
+      3)Fix Bugs!
