@@ -6,11 +6,10 @@ from blowfish import Blowfish
 from adpcm import decodeADPCMToPCM
 from byteutils import *
 
+# Creates a Rover object that you can communicate with.
 
 class Rover:
     def __init__(self):
-        """ Creates a Rover object that you can communicate with.
-        """
 
         self.HOST = '192.168.1.100'
         self.PORT = 80
@@ -35,12 +34,14 @@ class Rover:
         key = TARGET_ID + ':' + camera_ID + '-save-private:' + TARGET_PASSWORD
 
         # Extract Blowfish inputs from rest of reply
+
         l = bytes_to_int(reply, 66)
         r1 = bytes_to_int(reply, 70)
         l2 = bytes_to_int(reply, 74)
         r2 = bytes_to_int(reply, 78)
 
         # Make Blowfish cipher from key
+
         bf = _RoverBlowfish(key)
 
         # Encrypt inputs from reply
@@ -51,40 +52,48 @@ class Rover:
         self._send_command_int_request(2, [l, r1, l2, r2])
 
         # Ignore reply from Rover
+
         self._receive_a_command_reply_from_rover(26)
 
         # Start timer task for keep-alive message every 60 seconds
+
         self._start_keep_rover_alive_task()
 
         # Setup vertical camera controller
+
         self.cameraVertical = _RoverCamera(self, 1)
 
         # Send video-start request
+
         self._send_command_int_request(4, [1])
 
         # Get reply from Rover
+
         reply = self._receive_a_command_reply_from_rover(29)
 
         # Create media socket connection to Rover
         self.mediasock = self._new_socket()
 
         # Send video-start request based on last four bytes of reply
+
         self._send_a_request(self.mediasock, 'V', 0, 4, map(ord, reply[25:]))
 
         # Send audio-start request
+
         self._send_command_byte_request(8, [1])
 
         # Ignore audio-start reply
+
         self._receive_a_command_reply_from_rover(25)
 
         # Receive images on another thread until closed
+
         self.is_active = True
         self.reader_thread = _MediaThread(self)
         self.reader_thread.start()
 
+    # Closes off all communications with Rover.
     def close(self):
-        """ Closes off communication with Rover.
-        """
 
         self.keep_a_live_timer.cancel()
 
@@ -95,8 +104,8 @@ class Rover:
             self.mediasock.close()
 
     def turn_stealth_on(self):
-        """ Turns on stealth mode (infrared).
-        """
+        #Turns on stealth mode (infrared).
+
         self._send_camera_request(94)
 
     def turn_stealth_off(self):

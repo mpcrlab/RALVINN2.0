@@ -1,6 +1,6 @@
 from pygame.locals import *
 from rover import Rover20
-import pygame,sys
+import pygame
 
 
 class Steer:
