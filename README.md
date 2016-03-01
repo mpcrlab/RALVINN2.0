@@ -12,12 +12,13 @@
 
 ##Current Status
 
-        This is a work in progress by the members of the FAU Machine Perception Club. You may encounter bugs and
-       other issues when running this code. 
+        This is a work in progress by the members of the FAU Machine Perception Club. You may 
+        encounter bugs and other issues when running this code. 
 
 ##Getting Started with RALVINN.
 
-        Before running the code you will need to make sure that the following python packages have been installed
+        Before running the code you will need to make sure that the following python packages 
+        have been installed
 
         1)OpenCV 3.0
         2)PyPNG
@@ -26,7 +27,9 @@
 
 ##How to connect to BrookStone Rover.
 
-        Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVERID. Connecto the SSID ID. The             green LED light on the Rover will stop flashig once a connection has beeb established.
+        Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVERID. 
+        Connecto the SSID ID. The green LED light on the Rover will stop flashig once 
+        a connection has beeb established.
 
 ## How to control the BrookStone Rover 2.0:
         W - Forward
