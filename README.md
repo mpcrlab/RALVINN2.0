@@ -12,10 +12,10 @@ other issues when running this code.
 
 Before running the code you will need to make sure that the following python packages have been installed
 
-1) OpenCV 3.0
-2) PyPNG
-3) PyQrCode and QRTools
-4) Pygame
+*OpenCV 3.0
+*PyPNG
+*PyQrCode and QRTools
+*Pygame
 
 ##Connect to Rover 2.0
 
@@ -23,7 +23,7 @@ Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVE
 
 ##To Do List
 
-1) Give the BrookStone Rover 2.0 the ability to read QR codes.
-2) Add more helper functions.
-3) Fix Bugs!
+*Give the BrookStone Rover 2.0 the ability to read QR codes.
+*Add more helper functions.
+*Fix Bugs!
 
