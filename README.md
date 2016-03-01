@@ -1,4 +1,10 @@
-#Rover Autonomous Land Vehicle in a Neural Network with OpenCV
+                          Rover Autonomous Land Vehicle in a Neural Network
+-------------------------------------------------------
+
+                        Machine Perception and Cognitive Robotics Laboratory
+                            Center for Complex Systems and Brain Sciences
+                                    Florida Atlantic University
+-------------------------------------------------------
 
 This is the second version of the RALVINN code. It uses OpenCV to read the images from
 the BrookStone Rover rather than using Pygame. 
