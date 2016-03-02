@@ -1,4 +1,4 @@
-from RoverVideo import *
+from roverBrain import *
 
 if __name__ == '__main__':
-    rover = Rover()
+    brain = roverBrain()
