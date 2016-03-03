@@ -8,7 +8,7 @@
 ##Info
 
         This is the second version of the RALVINN code. It uses OpenCV to read the images from
-        the BrookStone Rover rather than using Pygame. 
+        the BrookStone Rover instead of PyGame. 
 
 ##Current Status
 
@@ -23,13 +23,15 @@
         1)OpenCV 3.0
         2)PyPNG
         3)PyQrCode and QRTools
-        4)Pygame
+        4)PyGame
+        5)cStringIO
 
 ##How to connect to BrookStone Rover.
 
-        Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVERID. 
-        Connecto the SSID ID. The green LED light on the Rover will stop flashig once 
-        a connection has beeb established.
+        1)Open your WIFI settings. 
+        2)Finds the Rover SSID, it usually starts with Rover_ROVERID.
+        3)Connect the SSID ID. The green LED light on the Rover will stop flashing once 
+        a connection has been established.
 
 ## How to control the BrookStone Rover 2.0:
         W - Forward
@@ -40,11 +42,10 @@
         J - Camera Up
         K - Camera Down
         I - Toggle Lights
-        R - Neural Network
         Space bar - Take a pic
-
-
+        
 ##To Do List
       1)Give the BrookStone Rover 2.0 the ability to read QR codes.
-      2)Add more helper functions.
+      2)Apply Reinforcement Learning using the QR codes to create positive and negative feedback.  
+      3)Add more helper functions.
       3)Fix Bugs!
