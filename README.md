@@ -8,7 +8,7 @@
 ##Info
 
         This is the second version of the RALVINN code. It uses OpenCV to read the images from
-        the BrookStone Rover rather than using Pygame. 
+        the BrookStone Rover instead of PyGame. 
 
 ##Current Status
 
@@ -23,15 +23,27 @@
         1)OpenCV 3.0
         2)PyPNG
         3)PyQrCode and QRTools
-        4)Pygame
+        4)PyGame
+        5)cStringIO
 
 ##How to connect to BrookStone Rover.
 
-        Open your wifi settings. Finds the Rover SSID, it usually starts with Rover_ROVERID. 
-        Connecto the SSID ID. The green LED light on the Rover will stop flashig once 
-        a connection has beeb established.
+        1)Open your WIFI settings. 
+        2)Finds the Rover SSID, it usually starts with Rover_ROVERID.
+        3)Connect the SSID ID. The green LED light on the Rover will stop flashing once 
+        a connection has been established.
 
-## How to control the BrookStone Rover 2.0:
+
+##How to create a QR Code.
+        To create a QR code you will need to run CreateQRCode. This python script creates a qr code with whatever
+        command you give it.
+        
+##How does the BrookStone Rover Read QR Codes?
+        Withing the RoverPylot script there is refresh_video_feed. That scripts saves the image array into a file named
+        "qr.ong". Then when the rover sees the QR in the feed the function qr_tools uses the built in function decoder
+        to decode the meaning of the QR code.
+        
+##How to control the BrookStone Rover 2.0:
         W - Forward
         S - Back
         D - Right
@@ -40,11 +52,10 @@
         J - Camera Up
         K - Camera Down
         I - Toggle Lights
-        R - Neural Network
-        Space bar - Take a pic
-
-
+        Space bar - Take a pic.
+        
 ##To Do List
-      1)Give the BrookStone Rover 2.0 the ability to read QR codes.
+      1)Apply Reinforcement Learning using the QR codes to create positive and negative feedback.  
       2)Add more helper functions.
       3)Fix Bugs!
+          * Corrupt JPEG DATA - Only seen on Linux system. Will need to investigate. Does not affect Rover.

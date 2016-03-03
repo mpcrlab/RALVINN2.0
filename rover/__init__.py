@@ -21,7 +21,7 @@ class Rover:
         self.TREAD_DELAY_SEC = 1.0
         self.KEEPALIVE_PERIOD_SEC = 60
 
-        # Create command socket connection to Rover
+        # Create command socket connection to Rover      
         self.commandsock = self._newSocket()
 
         # Send login request with four arbitrary numbers
@@ -65,7 +65,7 @@ class Rover:
         # Get reply from Rover
         reply = self._receiveCommandReply(29)
 
-        # Create media socket connection to Rover
+        # Create media socket connection to Rover      
         self.mediasock = self._newSocket()
 
         # Send video-start request based on last four bytes of reply
@@ -220,7 +220,7 @@ class Rover20(Rover):
         # 1: Right, forward
         # 2: Right, backward
         # 4: Left, forward
-        # 5: Left, backward
+        # 5: Left, backward        
         self._sendDeviceControlRequest(wheeldir, speed)
 
     # "Private" classes ===========================================================
@@ -249,16 +249,16 @@ class _MediaThread(threading.Thread):
         # Accumulates media bytes
         mediabytes = ''
 
-        # Starts True; set to False by Rover.close()
+        # Starts True; set to False by Rover.close()       
         while self.rover.is_active:
 
-            # Grab bytes from rover, halting on failure
+            # Grab bytes from rover, halting on failure            
             try:
                 buf = self.rover.mediasock.recv(self.BUFSIZE)
             except:
                 break
 
-            # Do we have a media frame start?
+            # Do we have a media frame start?        
             k = buf.find('MO_V')
 
             # Yes

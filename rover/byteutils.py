@@ -1,3 +1,6 @@
+"""
+Python methods for converting bytestrings to integers.
+"""
 
 import struct
 import sys
