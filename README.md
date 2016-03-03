@@ -42,7 +42,10 @@
         Withing the RoverPylot script there is method called refresh_video_feed. That scripts saves 
         the image array into a file named "qr.ong". Then when the rover sees the QR in the feed the 
         function qr_tools uses the built in function decoder to decode the meaning of the QR code.
-        
+##How to use this code.
+        Run MPCR_RALVINN.py. If everything has been installed correctly a window will pop up showing the
+        Rover video feed. Use the keyboard commands below to move the BrookStone Rover 2.0
+
 ##How to control the BrookStone Rover 2.0:
         W - Forward
         S - Back
