@@ -1,13 +1,17 @@
 import cv2
 import pygame
+import qrcode
+
 from rover import roverShell
 from pygame.locals import *
-import QRDetector
+import pyqrcode
 from time import sleep
 from datetime import date
 from random import choice
 from string import ascii_lowercase, ascii_uppercase
 import cStringIO
+import sys
+import qrtools
 import numpy as np
 
 
@@ -45,28 +49,44 @@ class roverBrain():
     def run(self):
         sleep(1.5)
         while not self.quit:
-            self.parseControls()
-            self.refreshVideo()
+            self.update_rover_state()
+            self.resfresh_video_feed()
+            self.qr_code()
         self.rover.quit = True
         pygame.quit()
 
-    def refreshVideo(self):
+    def resfresh_video_feed(self):
 
         self.rover.lock.acquire()
         image = self.rover.currentImage
+        qr_image = image
         self.rover.lock.release()
 
         cv_image = create_opencv_image_from_stringio(cStringIO.StringIO(image))
         image = cvimage_to_pygame(cv_image)
-
-        qr= QRDetector.detectQRCode()
-
+        ##
+        self.rover.lock.acquire()
+        curr_image = self.rover.currentImage
+        self.rover.lock.release()
+        curr_image = cStringIO.StringIO(curr_image)
+        pygame.image.load(curr_image, 'tmp.jpg').convert()
+        ##
         self.screen.blit(image, (0, 0))
         pygame.display.update(self.imageRect)
 
         self.clock.tick(self.fps)
 
-    def parseControls(self):
+
+    def qr_code(self):
+        qr = qrtools.QR()
+        # NEED to save tmp.jpg locally, if im not mistaken the code should be on the RoverPylot code
+        #  if qr.decode('temp.jpg'):
+        if qr.decode('left.png'):
+            print qr.data
+        else:
+            pass
+
+    def update_rover_state(self):
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.quit = True
