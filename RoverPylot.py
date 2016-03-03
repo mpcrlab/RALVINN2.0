@@ -46,12 +46,12 @@ class roverBrain():
         sleep(1.5)
         while not self.quit:
             self.update_rover_state()
-            self.resfresh_video_feed()
+            self.refresh_video_from_feed()
             self.qr_code()
         self.rover.quit = True
         pygame.quit()
 
-    def resfresh_video_feed(self):
+    def refresh_video_from_feed(self):
 
         self.rover.lock.acquire()
         image = self.rover.currentImage
