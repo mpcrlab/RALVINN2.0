@@ -35,13 +35,13 @@
 
 
 ##How to create a QR Code.
-        To create a QR code you will need to run CreateQRCode. This python script creates a qr code with whatever
-        command you give it.
+        To create a QR code you will need to run CreateQRCode. This python script creates a qr code with 
+        whatever command you give it.
         
 ##How does the BrookStone Rover Read QR Codes?
-        Withing the RoverPylot script there is refresh_video_feed. That scripts saves the image array into a file named
-        "qr.ong". Then when the rover sees the QR in the feed the function qr_tools uses the built in function decoder
-        to decode the meaning of the QR code.
+        Withing the RoverPylot script there is refresh_video_feed. That scripts saves the image array 
+        into a file named "qr.ong". Then when the rover sees the QR in the feed the function qr_tools 
+        uses the built in function decoder to decode the meaning of the QR code.
         
 ##How to control the BrookStone Rover 2.0:
         W - Forward
