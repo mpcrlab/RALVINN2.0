@@ -1,17 +1,16 @@
-import struct
-import threading
 import socket
+import threading
 import time
 
-from blowfish import Blowfish
 from adpcm import decodeADPCMToPCM
+from blowfish import Blowfish
 from byteutils import *
 
-class Rover:
 
+class Rover:
     def __init__(self):
-        ''' Creates a Rover object that you can communicate with.
-        '''
+        """ Creates a Rover object that you can communicate with.
+        """
 
         self.HOST = '192.168.1.100'
         self.PORT = 80
@@ -22,9 +21,8 @@ class Rover:
         self.TREAD_DELAY_SEC = 1.0
         self.KEEPALIVE_PERIOD_SEC = 60
 
-
         # Create command socket connection to Rover
-        self.commandsock = self._newSocket()
+        self.commandsock = self._newSocket
 
         # Send login request with four arbitrary numbers
         self._sendCommandIntRequest(0, [0, 0, 0, 0])
@@ -46,8 +44,8 @@ class Rover:
         bf = _RoverBlowfish(key)
 
         # Encrypt inputs from reply
-        L1,R1 = bf.encrypt(L1, R1)
-        L2,R2 = bf.encrypt(L2, R2)
+        L1, R1 = bf.encrypt(L1, R1)
+        L2, R2 = bf.encrypt(L2, R2)
 
         # Send encrypted reply to Rover
         self._sendCommandIntRequest(2, [L1, R1, L2, R2])
@@ -57,7 +55,6 @@ class Rover:
 
         # Start timer task for keep-alive message every 60 seconds
         self._startKeepaliveTask()
-
 
         # Set up vertical camera controller
         self.cameraVertical = _RoverCamera(self, 1)
@@ -69,7 +66,7 @@ class Rover:
         reply = self._receiveCommandReply(29)
 
         # Create media socket connection to Rover
-        self.mediasock = self._newSocket()
+        self.mediasock = self._newSocket
 
         # Send video-start request based on last four bytes of reply
         self._sendRequest(self.mediasock, 'V', 0, 4, map(ord, reply[25:]))
@@ -85,10 +82,9 @@ class Rover:
         self.reader_thread = _MediaThread(self)
         self.reader_thread.start()
 
-
     def close(self):
-        ''' Closes off commuincation with Rover.
-        '''
+        """ Closes off communication with Rover.
+        """
 
         self.keepalive_timer.cancel()
 
@@ -99,69 +95,81 @@ class Rover:
             self.mediasock.close()
 
     def turnStealthOn(self):
-        ''' Turns on stealth mode (infrared).
-        '''
+        """ Turns on stealth mode (infrared).
+        """
         self._sendCameraRequest(94)
 
-
     def turnStealthOff(self):
-        ''' Turns off stealth mode (infrared).
-        '''
+        """ Turns off stealth mode (infrared).
+        """
         self._sendCameraRequest(95)
 
     def moveCameraVertical(self, where):
-        ''' Moves the camera up or down, or stops moving it.  A nonzero value for the
+        """ Moves the camera up or down, or stops moving it.  A nonzero value for the
             where parameter causes the camera to move up (+) or down (-).  A
             zero value stops the camera from moving.
-        '''
+            :param where:
+        """
         self.cameraVertical.move(where)
 
-    def _startKeepaliveTask(self,):
+    def _startKeepaliveTask(self, ):
         self._sendCommandByteRequest(255)
         self.keepalive_timer = \
             threading.Timer(self.KEEPALIVE_PERIOD_SEC, self._startKeepaliveTask, [])
         self.keepalive_timer.start()
 
-    def _sendCommandByteRequest(self, id, bytes=[]):
-        self._sendCommandRequest(id, len(bytes), bytes)
+    def _sendCommandByteRequest(self, id, rover_bytes=None):
+        if rover_bytes is None:
+            rover_bytes = []
+        self._sendCommandRequest(id, len(rover_bytes), rover_bytes)
 
-    def _sendCommandIntRequest(self, id, intvals):
-        bytevals = []
-        for val in intvals:
+    def _sendCommandIntRequest(self, rover_id, integer_intervals):
+        byte_value = []
+        for val in integer_intervals:
             for c in struct.pack('I', val):
-                bytevals.append(ord(c))
-        self._sendCommandRequest(id, 4*len(intvals), bytevals)
+                byte_value.append(ord(c))
+        self._sendCommandRequest(rover_id, 4 * len(integer_intervals), byte_value)
 
     def _sendCommandRequest(self, id, n, contents):
+        """
+
+        :type contents: object
+        """
         self._sendRequest(self.commandsock, 'O', id, n, contents)
 
-    def _sendRequest(self, sock, c, id, n, contents):
-        bytes = [ord('M'), ord('O'), ord('_'), ord(c), id, \
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, n, 0, 0, 0, 0, 0, 0, 0]
-        bytes.extend(contents)
-        request = ''.join(map(chr, bytes))
+    @staticmethod
+    def _sendRequest(sock, c, id, n, contents):
+        rover_bytes = [ord('M'), ord('O'), ord('_'), ord(c), id,
+                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0, n, 0, 0, 0, 0, 0, 0, 0]
+        rover_bytes.extend(contents)
+        request = ''.join(map(chr, rover_bytes))
         sock.send(request)
 
     def _receiveCommandReply(self, count):
+        """
+        :type count: object
+        """
         reply = self.commandsock.recv(count)
         return reply
 
+    @property
     def _newSocket(self):
         sock = socket.socket()
         sock.connect((self.HOST, self.PORT))
         return sock
 
-    def _sendDeviceControlRequest(self, a, b) :
-        self._sendCommandByteRequest(250, [a,b])
+    def _sendDeviceControlRequest(self, a, b):
+        self._sendCommandByteRequest(250, [a, b])
 
     def _sendCameraRequest(self, request):
         self._sendCommandByteRequest(14, [request])
 
 
 class Rover20(Rover):
-
     def __init__(self):
+        """
 
+        """
         Rover.__init__(self)
 
         # Set up treads
@@ -169,8 +177,8 @@ class Rover20(Rover):
         self.rightTread = _RoverTread(self, 1)
 
     def close(self):
-        ''' Closes off commuincation with Rover.
-        '''
+        """ Closes off communication with Rover.
+        """
 
         Rover.close(self)
 
@@ -178,51 +186,54 @@ class Rover20(Rover):
         self.setTreads(0, 0)
 
     def getBatteryPercentage(self):
-        ''' Returns percentage of battery remaining.
-        '''
+        """ Returns percentage of battery remaining.
+        """
         self._sendCommandByteRequest(251)
         reply = self._receiveCommandReply(32)
         return 15 * ord(reply[23])
 
     def setTreads(self, left, right):
-        ''' Sets the speed of the left and right treads (wheels).  + = forward;
+        """ Sets the speed of the left and right treads (wheels).  + = forward;
         - = backward; 0 = stop. Values should be in [-1..+1].
-        '''
+        :param right:
+        :param left:
+        """
         currTime = time.time()
 
         self.leftTread.update(left)
         self.rightTread.update(right)
 
     def turnLightsOn(self):
-        ''' Turns the headlights and taillights on.
-        '''
+        """ Turns the headlights and taillights on.
+        """
         self._setLights(8)
 
-
     def turnLightsOff(self):
-        ''' Turns the headlights and taillights off.
-        '''
+        """ Turns the headlights and taillights off.
+        """
         self._setLights(9)
 
     def _setLights(self, onoff):
+        """
+
+        :type onoff: object
+        """
         self._sendDeviceControlRequest(onoff, 0)
 
     def processVideo(self, jpegbytes, timestamp_10msec):
-        ''' Proccesses bytes from a JPEG image streamed from Rover.
+        """ Processes bytes from a JPEG image streamed from Rover.
             Default method is a no-op; subclass and override to do something
             interesting.
-        '''
+        """
         pass
 
     def processAudio(self, pcmsamples, timestamp_10msec):
-        ''' Proccesses a block of 320 PCM audio samples streamed from Rover.
+        """ Processes a block of 320 PCM audio samples streamed from Rover.
             Audio is sampled at 8192 Hz and quantized to +/- 2^15.
             Default method is a no-op; subclass and override to do something
             interesting.
-        '''
+        """
         pass
-
-
 
     def _spinWheels(self, wheeldir, speed):
         # 1: Right, forward
@@ -232,97 +243,11 @@ class Rover20(Rover):
         self._sendDeviceControlRequest(wheeldir, speed)
 
 
-class Revolution(Rover):
+# A special BlowFish variant with P-arrays set to zero instead of digits of Pi
 
-    def __init__(self):
-
-        Rover.__init__(self)
-
-        self.steerdir_prev = 0
-        self.command_prev = 0
-        self.goslow_prev = 0
-
-        self.using_turret = False
-
-        # Set up vertical camera controller
-        self.cameraHorizontal = _RoverCamera(self, 5)
-
-    def drive(self, wheeldir, steerdir, goslow):
-
-        goslow = 1 if goslow else 0
-
-        command = 0
-
-        if wheeldir == +1 and steerdir ==  0:
-            command = 1
-        if wheeldir == -1 and steerdir ==  0:
-            command = 2
-        if wheeldir ==  0 and steerdir == +1:
-            command = 4
-        if wheeldir ==  0 and steerdir == -1:
-            command = 5
-        if wheeldir == +1 and steerdir == -1:
-            command = 6
-        if wheeldir == +1 and steerdir == +1:
-            command = 7
-        if wheeldir == -1 and steerdir == -1:
-            command = 8
-        if wheeldir == -1 and steerdir == +1:
-            command = 9
-
-        if steerdir == 0 and self.steerdir_prev != 0:
-            command = 3
-
-        if command != self.command_prev or goslow != self.goslow_prev:
-            self._sendDeviceControlRequest(command, goslow)
-
-        self.steerdir_prev = steerdir
-        self.command_prev = command
-        self.goslow_prev = goslow
-
-    def processVideo(self, imgbytes, timestamp_msec):
-        ''' Proccesses bytes from an image streamed from Rover.
-            Default method is a no-op; subclass and override to do something
-            interesting.
-        '''
-        pass
-
-    def processAudio(self, audiobytes, timestamp_msec):
-        ''' Proccesses a block of 1024 PCM audio samples streamed from Rover.
-            Audio is sampled at 8192 Hz and quantized to +/- 2^15.
-            Default method is a no-op; subclass and override to do something
-            interesting.
-        '''
-        pass
-
-    def useTurretCamera(self):
-        '''  Switches to turret camera.
-        '''
-        self._sendUseCameraRequest(1)
-
-
-    def useDrivingCamera(self):
-        '''  Switches to driving camera.
-        '''
-        self._sendUseCameraRequest(2)
-
-    def moveCameraHorizontal(self, where):
-        ''' Moves the camera up or down, or stops moving it.  A nonzero value for the
-            where parameter causes the camera to move up (+) or down (-).  A
-            zero value stops the camera from moving.
-        '''
-        self.cameraHorizontal.move(where)
-
-    def _sendUseCameraRequest(self, camera):
-        self._sendCommandByteRequest(19, [6, camera])
-
-# "Private" classes ===========================================================
-
-# A special Blowfish variant with P-arrays set to zero instead of digits of Pi
 class _RoverBlowfish(Blowfish):
-
     def __init__(self, key):
-
+        Blowfish.__init__(self, key)
         ORIG_P = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         self._keygen(key, ORIG_P)
@@ -330,7 +255,6 @@ class _RoverBlowfish(Blowfish):
 
 # A thread for reading streaming media from the Rover
 class _MediaThread(threading.Thread):
-
     def __init__(self, rover):
 
         threading.Thread.__init__(self)
@@ -356,7 +280,7 @@ class _MediaThread(threading.Thread):
             k = buf.find('MO_V')
 
             # Yes
-            if k  >= 0:
+            if k >= 0:
 
                 # Already have media bytes?
                 if len(mediabytes) > 0:
@@ -376,7 +300,7 @@ class _MediaThread(threading.Thread):
                         audsize = bytes_to_uint(mediabytes, 36)
                         sampend = 40 + audsize
                         offset = bytes_to_short(mediabytes, sampend)
-                        index  = ord(mediabytes[sampend+2])
+                        index = ord(mediabytes[sampend + 2])
                         pcmsamples = decodeADPCMToPCM(mediabytes[40:sampend], offset, index)
                         self.rover.processAudio(pcmsamples, timestamp)
 
@@ -392,8 +316,8 @@ class _MediaThread(threading.Thread):
 
                 mediabytes += buf
 
-class _RoverTread(object):
 
+class _RoverTread(object):
     def __init__(self, rover, index):
 
         self.rover = rover
@@ -412,14 +336,14 @@ class _RoverTread(object):
                 wheel = self.index
             else:
                 wheel = self.index + 1
-            currTime = time.time()
-            if (currTime - self.startTime) > self.rover.TREAD_DELAY_SEC:
-                self.startTime = currTime
-                self.rover._spinWheels(wheel, int(round(abs(value)*10)))
+            current_time = time.time()
+            if (current_time - self.startTime) > self.rover.TREAD_DELAY_SEC:
+                self.startTime = current_time
+                self.rover._spinWheels(wheel, int(round(abs(value) * 10)))
                 self.isMoving = True
 
-class _RoverCamera(object):
 
+class _RoverCamera(object):
     def __init__(self, rover, stopcmd):
 
         self.rover = rover
@@ -434,12 +358,13 @@ class _RoverCamera(object):
                 self.isMoving = False
         elif not self.isMoving:
             if where == 1:
-                self.rover._sendCameraRequest(self.stopcmd-1)
+                self.rover._sendCameraRequest(self.stopcmd - 1)
             else:
-                self.rover._sendCameraRequest(self.stopcmd+1)
+                self.rover._sendCameraRequest(self.stopcmd + 1)
             self.isMoving = True
 
-class roverShell(Rover20):
+
+class RoverShell(Rover20):
     def __init__(self):
         Rover20.__init__(self)
         self.quit = False

@@ -1,11 +1,11 @@
-'''
-A Python class for Adpative Differential Pulse Code Modulation.  
+"""
+A Python class for Adpative Differential Pulse Code Modulation.
 
 Copyright (C) 2014 Simon D. Levy
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as 
-published by the Free Software Foundation, either version 3 of the 
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of the
 License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 
-'''
+"""
 
 _indexAdjust = [-1, -1, -1, -1, 2, 4, 6, 8]
 
@@ -115,8 +115,8 @@ def _constrain(val, minval, maxval):
 
 
 def decodeADPCMToPCM(raw, pre_sample, index):
-    ''' Returns ordinary PCM samples in interval +/- 2^15, decoded from ADPCM samples
-    '''
+    """ Returns ordinary PCM samples in interval +/- 2^15, decoded from ADPCM samples
+    """
     decoded = []
 
     for i in range(len(raw) << 1):

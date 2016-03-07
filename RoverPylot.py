@@ -1,6 +1,6 @@
 import cv2
 import pygame
-from rover import roverShell
+from rover import RoverShell
 from pygame.locals import *
 from time import sleep
 from datetime import date
@@ -23,13 +23,13 @@ def cvimage_to_pygame(image):
     return pygame.image.frombuffer(new_image.tostring(), new_image.shape[1::-1], "RGB")
 
 
-class roverBrain():
+class RoverControl():
     def __init__(self):
         pygame.init()
         pygame.display.init()
 
         self.quit = False
-        self.rover = roverShell()
+        self.rover = RoverShell()
         self.fps = 48
         self.windowSize = [290, 230]
         self.imageRect = (0, 0, 320, 240)
@@ -54,6 +54,9 @@ class roverBrain():
 
     def resfresh_video_feed(self):
 
+        """
+
+        """
         self.rover.lock.acquire()
         image = self.rover.currentImage
         self.rover.lock.release()
@@ -83,6 +86,9 @@ class roverBrain():
             pass
 
     def update_rover_state(self):
+        """
+
+        """
         for event in pygame.event.get():
             if event.type == QUIT:
                 self.quit = True
@@ -104,6 +110,9 @@ class roverBrain():
                 pass
 
     def takepicure(self):
+        """
+
+        """
         with open(self.newpicturename, 'w') as pic:
             self.rover.lock.acquire()
             pic.write(self.rover.currentImage)
@@ -111,6 +120,10 @@ class roverBrain():
 
     @property
     def newpicturename(self):
+        """
+
+        :return:
+        """
         todaysDate = str(date.today())
         uniquekey = ''.join(choice(ascii_lowercase + ascii_uppercase))
         for _ in range(4):
@@ -119,6 +132,10 @@ class roverBrain():
     def updateTreads(self, key=None):
 
         # tread speed ranges from 0 (none) to one (full speed) so [.5 ,.5] would be half full speed
+        """
+
+        :param key:
+        """
         if key is None:
             self.rover.treads = [0, 0]
         elif key is K_w:
@@ -143,6 +160,10 @@ class roverBrain():
             pass
 
     def updatePeripherals(self, key=None):
+        """
+
+        :param key:
+        """
         if key is None:
             self.rover.peripherals['camera'] = 0
         elif key is K_j:
