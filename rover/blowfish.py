@@ -1,3 +1,20 @@
+'''
+A Python class implementing the Blowfish cipher.  Adapted on the C++ code at
+http://en.wikipedia.org/wiki/Blowfish_cipher, except where noted
+
+Copyright (C) 2014 Simon D. Levy
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as 
+published by the Free Software Foundation, either version 3 of the 
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+'''
+
 import ctypes
 
 
@@ -18,7 +35,6 @@ class Blowfish:
 
         self._keygen(key, ORIG_P)
 
-
     def encrypt(self, L, R):
         '''Accepts a pair of numbers and returns them in encrypted form.
         '''
@@ -30,7 +46,6 @@ class Blowfish:
         L ^= self.P[16]
         R ^= self.P[17]
         return (R, L)
-
 
     def decrypt(self, L, R):
         '''Accepts an encrypted pair of numbers and returns them in unencrypted 
@@ -44,7 +59,6 @@ class Blowfish:
         L ^= self.P[1]
         R ^= self.P[0]
         return (R, L)
-
 
     def _keygen(self, key, ORIG_P):
 
@@ -313,10 +327,8 @@ class Blowfish:
                  0xB74E6132, 0xCE77E25B, 0x578FDFE3, 0x3AC372E6]
             ]
 
-
         # P-array
         self.P = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
 
         # from https://www.schneier.com/code/bfsh-koc.zip
         j = 0
@@ -343,7 +355,7 @@ class Blowfish:
 
         x = _uint32(x)
         h = _uint32(self.S[0][x >> 24] + self.S[1][x >> 16 & 0xff])
-        return _uint32(( h ^ self.S[2][x >> 8 & 0xff] ) + self.S[3][x & 0xff])
+        return _uint32((h ^ self.S[2][x >> 8 & 0xff]) + self.S[3][x & 0xff])
 
 
 def _uint32(n):
