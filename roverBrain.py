@@ -1,15 +1,16 @@
 import cv2
 import pygame
-import sys
+import qrcode
 
 from rover import roverShell
-from rover import Rover20
 from pygame.locals import *
+import pyqrcode
 from time import sleep
 from datetime import date
 from random import choice
 from string import ascii_lowercase, ascii_uppercase
 import cStringIO
+import sys
 import qrtools
 import numpy as np
 
@@ -32,11 +33,10 @@ class roverBrain():
 
         self.quit = False
         self.rover = roverShell()
-        self.qr_treads = Rover20()
         self.fps = 48
         self.windowSize = [290, 230]
         self.imageRect = (0, 0, 320, 240)
-        self.displayCaption = "RALVINN CAMERA"
+        self.displayCaption = "RAVINN"
 
         pygame.display.set_caption(self.displayCaption)
 
@@ -50,41 +50,39 @@ class roverBrain():
         sleep(1.5)
         while not self.quit:
             self.update_rover_state()
-            self.refresh_video_from_feed()
+            self.resfresh_video_feed()
             self.qr_code()
         self.rover.quit = True
         pygame.quit()
-        sys.exit()
 
-    def refresh_video_from_feed(self):
+    def resfresh_video_feed(self):
 
         self.rover.lock.acquire()
         image = self.rover.currentImage
+        qr_image = image
         self.rover.lock.release()
 
         cv_image = create_opencv_image_from_stringio(cStringIO.StringIO(image))
         image = cvimage_to_pygame(cv_image)
-
-        # Save the array of bytes into an image file named qr.png
-        fname = 'qr.png'
-        fd = open(fname, 'w')
-        fd.write(str(self.rover.currentImage))
-        fd.close()
-
+        ##
+        self.rover.lock.acquire()
+        curr_image = self.rover.currentImage
+        self.rover.lock.release()
+        curr_image = cStringIO.StringIO(curr_image)
+        pygame.image.load(curr_image, 'tmp.jpg').convert()
+        ##
         self.screen.blit(image, (0, 0))
-        # Show image array over PyGame display
         pygame.display.update(self.imageRect)
 
         self.clock.tick(self.fps)
 
-    @staticmethod
+
     def qr_code(self):
-        # decode the qr image.
         qr = qrtools.QR()
-        if qr.decode('qr.png'):
+        # NEED to save tmp.jpg locally, if im not mistaken the code should be on the RoverPylot code
+        #  if qr.decode('temp.jpg'):
+        if qr.decode('left.png'):
             print qr.data
-            # if qr.data == "TURN RIGHT":
-            #     self.qr_treads = Rover20.setTreads(0,1)
         else:
             pass
 

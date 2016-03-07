@@ -9,8 +9,13 @@ from byteutils import *
 
 class Rover:
     def __init__(self):
+<<<<<<< HEAD
         """ Creates a Rover object that you can communicate with.
         """
+=======
+        ''' Creates a Rover object that you can communicate with. 
+        '''
+>>>>>>> RALVINNQR
 
         self.HOST = '192.168.1.100'
         self.PORT = 80
@@ -83,8 +88,13 @@ class Rover:
         self.reader_thread.start()
 
     def close(self):
+<<<<<<< HEAD
         """ Closes off commuincation with Rover.
         """
+=======
+        ''' Closes off commuincation with Rover.
+        '''
+>>>>>>> RALVINNQR
 
         self.keepalive_timer.cancel()
 
@@ -95,6 +105,7 @@ class Rover:
             self.mediasock.close()
 
     def turnStealthOn(self):
+<<<<<<< HEAD
         """ Turns on stealth mode (infrared).
         """
         self._sendCameraRequest(94)
@@ -106,9 +117,22 @@ class Rover:
 
     def moveCameraVertical(self, where):
         """ Moves the camera up or down, or stops moving it.  A nonzero value for the
+=======
+        ''' Turns on stealth mode (infrared).
+        '''
+        self._sendCameraRequest(94)
+
+    def turnStealthOff(self):
+        ''' Turns off stealth mode (infrared).
+        '''
+        self._sendCameraRequest(95)
+
+    def moveCameraVertical(self, where):
+        ''' Moves the camera up or down, or stops moving it.  A nonzero value for the 
+>>>>>>> RALVINNQR
             where parameter causes the camera to move up (+) or down (-).  A
             zero value stops the camera from moving.
-        """
+        '''
         self.cameraVertical.move(where)
 
     def _startKeepaliveTask(self, ):
@@ -117,9 +141,13 @@ class Rover:
             threading.Timer(self.KEEPALIVE_PERIOD_SEC, self._startKeepaliveTask, [])
         self.keepalive_timer.start()
 
+<<<<<<< HEAD
     def _sendCommandByteRequest(self, id, bytes=None):
         if bytes is None:
             bytes = []
+=======
+    def _sendCommandByteRequest(self, id, bytes=[]):
+>>>>>>> RALVINNQR
         self._sendCommandRequest(id, len(bytes), bytes)
 
     def _sendCommandIntRequest(self, id, intvals):
@@ -164,8 +192,13 @@ class Rover20(Rover):
         self.rightTread = _RoverTread(self, 1)
 
     def close(self):
+<<<<<<< HEAD
         """ Closes off commuincation with Rover.
         """
+=======
+        ''' Closes off commuincation with Rover.
+        '''
+>>>>>>> RALVINNQR
 
         Rover.close(self)
 
@@ -173,22 +206,32 @@ class Rover20(Rover):
         self.setTreads(0, 0)
 
     def getBatteryPercentage(self):
+<<<<<<< HEAD
         """ Returns percentage of battery remaining.
         """
+=======
+        ''' Returns percentage of battery remaining.
+        '''
+>>>>>>> RALVINNQR
         self._sendCommandByteRequest(251)
         reply = self._receiveCommandReply(32)
         return 15 * ord(reply[23])
 
     def setTreads(self, left, right):
+<<<<<<< HEAD
         """ Sets the speed of the left and right treads (wheels).  + = forward;
+=======
+        ''' Sets the speed of the left and right treads (wheels).  + = forward;
+>>>>>>> RALVINNQR
         - = backward; 0 = stop. Values should be in [-1..+1].
-        """
+        '''
         currTime = time.time()
 
         self.leftTread.update(left)
         self.rightTread.update(right)
 
     def turnLightsOn(self):
+<<<<<<< HEAD
         """ Turns the headlights and taillights on.
         """
         self._setLights(8)
@@ -196,24 +239,42 @@ class Rover20(Rover):
     def turnLightsOff(self):
         """ Turns the headlights and taillights off.
         """
+=======
+        ''' Turns the headlights and taillights on.
+        '''
+        self._setLights(8)
+
+    def turnLightsOff(self):
+        ''' Turns the headlights and taillights off.
+        '''
+>>>>>>> RALVINNQR
         self._setLights(9)
 
     def _setLights(self, onoff):
         self._sendDeviceControlRequest(onoff, 0)
 
     def processVideo(self, jpegbytes, timestamp_10msec):
+<<<<<<< HEAD
         """ Proccesses bytes from a JPEG image streamed from Rover.
             Default method is a no-op; subclass and override to do something
+=======
+        ''' Proccesses bytes from a JPEG image streamed from Rover.  
+            Default method is a no-op; subclass and override to do something 
+>>>>>>> RALVINNQR
             interesting.
-        """
+        '''
         pass
 
     def processAudio(self, pcmsamples, timestamp_10msec):
+<<<<<<< HEAD
         """ Proccesses a block of 320 PCM audio samples streamed from Rover.
+=======
+        ''' Proccesses a block of 320 PCM audio samples streamed from Rover.  
+>>>>>>> RALVINNQR
             Audio is sampled at 8192 Hz and quantized to +/- 2^15.
-            Default method is a no-op; subclass and override to do something
+            Default method is a no-op; subclass and override to do something 
             interesting.
-        """
+        '''
         pass
 
     def _spinWheels(self, wheeldir, speed):
@@ -229,7 +290,6 @@ class Rover20(Rover):
 # A special Blowfish variant with P-arrays set to zero instead of digits of Pi
 class _RoverBlowfish(Blowfish):
     def __init__(self, key):
-        Blowfish.__init__(self, key)
         ORIG_P = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         self._keygen(key, ORIG_P)
