@@ -1,9 +1,6 @@
 import cv2
 import pygame
-import sys
-
 from rover import roverShell
-from rover import Rover20
 from pygame.locals import *
 from time import sleep
 from datetime import date
@@ -13,6 +10,7 @@ import cStringIO
 import qrtools
 import numpy as np
 
+#https://github.com/circleupx/RALVINN2.0/commit/6976987d3cbd0183641eea8059f090a4f41bbed9
 
 def create_opencv_image_from_stringio(img_stream, cv2_img_flag=1):
     img_stream.seek(0)
@@ -32,7 +30,6 @@ class roverBrain():
 
         self.quit = False
         self.rover = roverShell()
-        self.qr_treads = Rover20()
         self.fps = 48
         self.windowSize = [290, 230]
         self.imageRect = (0, 0, 320, 240)
@@ -50,13 +47,12 @@ class roverBrain():
         sleep(1.5)
         while not self.quit:
             self.update_rover_state()
-            self.refresh_video_from_feed()
+            self.resfresh_video_feed()
             self.qr_code()
         self.rover.quit = True
         pygame.quit()
-        sys.exit()
 
-    def refresh_video_from_feed(self):
+    def resfresh_video_feed(self):
 
         self.rover.lock.acquire()
         image = self.rover.currentImage
@@ -78,13 +74,11 @@ class roverBrain():
         self.clock.tick(self.fps)
 
     @staticmethod
-    def qr_code(self):
+    def qr_code():
         # decode the qr image.
         qr = qrtools.QR()
         if qr.decode('qr.png'):
             print qr.data
-            # if qr.data == "TURN RIGHT":
-            #     self.qr_treads = Rover20.setTreads(0,1)
         else:
             pass
 

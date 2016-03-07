@@ -55,19 +55,12 @@
         J - Camera Up
         K - Camera Down
         I - Toggle Lights
-<<<<<<< HEAD
         Space bar - Take a pic.
         
 ##To Do List
-      1)Apply Reinforcement Learning using the QR codes to create positive and negative feedback.  
-      2)Add more helper functions.
-=======
-        Space bar - Take a pic
-        
-##To Do List
-      1)Give the BrookStone Rover 2.0 the ability to read QR codes.
+     1)Give the BrookStone Rover 2.0 the ability to read QR codes.
       2)Apply Reinforcement Learning using the QR codes to create positive and negative feedback.  
       3)Add more helper functions.
->>>>>>> RALVINNQR
-      3)Fix Bugs!
+      4)Fix Bugs!
           * Corrupt JPEG DATA - Only seen on Linux system. Will need to investigate. Does not affect Rover.
+        
